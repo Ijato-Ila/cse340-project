@@ -1,0 +1,28 @@
+{
+  "name": "cse340-project",
+  "version": "1.0.0",
+  "description": "Web Backend Development",
+  "homepage": "https://github.com/Ijato-Ila/cse340-project#readme",
+  "bugs": {
+    "url": "https://github.com/Ijato-Ila/cse340-project/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ijato-Ila/cse340-project.git"
+  },
+  "license": "ISC",
+  "author": "Ijato Precious-jane Okpen",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ejs": "^5.0.2",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
