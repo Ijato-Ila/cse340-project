@@ -1,7 +1,7 @@
 {
   "name": "cse340-project",
   "version": "1.0.0",
-  "description": "Web Backend Development",
+  "description": "CSE 340 Service Network web application built with Node.js, Express, and EJS.",
   "homepage": "https://github.com/Ijato-Ila/cse340-project#readme",
   "bugs": {
     "url": "https://github.com/Ijato-Ila/cse340-project/issues"
