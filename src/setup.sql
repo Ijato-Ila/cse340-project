@@ -14,8 +14,7 @@ CREATE TABLE organization (
 
 CREATE TABLE category (
     category_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    description TEXT NOT NULL
+    name VARCHAR(100) NOT NULL
 );
 
 
@@ -62,21 +61,11 @@ VALUES
 
 -- Insert Categories
 
-INSERT INTO category
-(name, description)
+IINSERT INTO category (name)
 VALUES
-(
-    'Community Service',
-    'Projects focused on helping local communities.'
-),
-(
-    'Environmental',
-    'Projects related to sustainability and environmental care.'
-),
-(
-    'Education',
-    'Projects that support teaching and learning opportunities.'
-);
+('Community Service'),
+('Environmental'),
+('Education');
 
 
 -- Insert Projects
