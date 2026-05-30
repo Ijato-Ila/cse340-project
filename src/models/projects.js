@@ -2,23 +2,46 @@ import db from './db.js';
 
 const getAllProjects = async () => {
   const query = `
-    SELECT
-      project.project_id,
-      project.title,
-      project.description,
-      project.location,
-      organization.name AS organization_name,
-      category.name AS category_name
-    FROM project
-    JOIN organization
-      ON project.organization_id = organization.organization_id
-    JOIN category
-      ON project.category_id = category.category_id;
-  `;
+        SELECT
+            project.project_id,
+            project.title,
+            project.description,
+            project.location,
+            organization.name AS organization_name,
+            category.name AS category_name
+        FROM project
+        JOIN organization
+            ON project.organization_id = organization.organization_id
+        JOIN category
+            ON project.category_id = category.category_id;
+    `;
 
   const result = await db.query(query);
 
   return result.rows;
 };
 
-export { getAllProjects };
+const getProjectsByOrganizationId = async (organizationId) => {
+    const query = `
+        SELECT
+            project_id,
+            organization_id,
+            title,
+            description,
+            location,
+            date
+        FROM project
+        WHERE organization_id = $1
+        ORDER BY date;
+    `;
+
+    const queryParams = [organizationId];
+    const result = await db.query(query, queryParams);
+
+    return result.rows;
+};
+
+export {
+  getAllProjects,
+  getProjectsByOrganizationId
+};
