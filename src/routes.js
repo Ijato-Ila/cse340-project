@@ -7,8 +7,16 @@ import {
     showOrganizationDetailsPage
 } from './controllers/organizations.js';
 
-import { showProjectsPage } from './controllers/projects.js';
-import { showCategoriesPage } from './controllers/categories.js';
+import {
+    showProjectsPage,
+    showProjectDetailsPage
+} from './controllers/projects.js';
+
+import {
+    showCategoriesPage,
+    showCategoryDetailsPage
+} from './controllers/categories.js';
+
 import { testErrorPage } from './controllers/errors.js';
 
 const router = express.Router();
@@ -19,8 +27,10 @@ router.get('/organizations', showOrganizationsPage);
 router.get('/organization/:id', showOrganizationDetailsPage);
 
 router.get('/projects', showProjectsPage);
+router.get('/project/:id', showProjectDetailsPage);
 
 router.get('/categories', showCategoriesPage);
+router.get('/category/:id', showCategoryDetailsPage);
 
 router.get('/test-route', (req, res) => {
     console.log('TEST ROUTE HIT');
