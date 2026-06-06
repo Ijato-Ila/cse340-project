@@ -1,11 +1,53 @@
 import {
+    body,
+    validationResult
+} from 'express-validator';
+
+import {
     getAllOrganizations,
-    getOrganizationDetails
+    getOrganizationDetails,
+    createOrganization,
+    updateOrganization
 } from '../models/organizations.js';
 
 import {
     getProjectsByOrganizationId
 } from '../models/projects.js';
+
+
+const organizationValidation = [
+    body('name')
+        .trim()
+        .notEmpty()
+        .withMessage('Organization name is required')
+        .isLength({
+            min: 3,
+            max: 150
+        })
+        .withMessage(
+            'Organization name must be between 3 and 150 characters'
+        ),
+
+    body('description')
+        .trim()
+        .notEmpty()
+        .withMessage('Organization description is required')
+        .isLength({
+            max: 500
+        })
+        .withMessage(
+            'Organization description cannot exceed 500 characters'
+        ),
+
+    body('contactEmail')
+        .normalizeEmail()
+        .notEmpty()
+        .withMessage('Contact email is required')
+        .isEmail()
+        .withMessage(
+            'Please provide a valid email address'
+        )
+];
 
 const showOrganizationsPage = async (req, res) => {
     const organizations = await getAllOrganizations();
@@ -20,7 +62,7 @@ const showOrganizationsPage = async (req, res) => {
 
 const showOrganizationDetailsPage = async (req, res) => {
     console.log('showOrganizationDetailsPage is running');
-    
+
     const organizationId = req.params.id;
 
     const organizationDetails =
@@ -38,7 +80,109 @@ const showOrganizationDetailsPage = async (req, res) => {
     });
 };
 
+const showNewOrganizationForm = async (req, res) => {
+    const title = 'Add New Organization';
+
+    res.render('new-organization', {
+        title
+    });
+};
+
+
+const showEditOrganizationForm = async (req, res) => {
+    const organizationId = req.params.id;
+
+    const organizationDetails =
+        await getOrganizationDetails(
+            organizationId
+        );
+
+    const title = 'Edit Organization';
+
+    res.render('edit-organization', {
+        title,
+        organizationDetails
+    });
+};
+
+
+const processEditOrganizationForm = async (req, res) => {
+    const organizationId = req.params.id;
+
+    const {
+        name,
+        description,
+        contactEmail,
+        logoFilename
+    } = req.body;
+
+    await updateOrganization(
+        organizationId,
+        name,
+        description,
+        contactEmail,
+        logoFilename
+    );
+
+    req.flash(
+        'success',
+        'Organization updated successfully.'
+    );
+
+    res.redirect(
+        `/organization/${organizationId}`
+    );
+};
+
+
+const processNewOrganizationForm = async (req, res) => {
+    const results = validationResult(req);
+
+    if (!results.isEmpty()) {
+        req.flash(
+            'error',
+            results.array()[0].msg
+        );
+
+        return res.redirect(
+            '/new-organization'
+        );
+    }
+
+    const {
+        name,
+        description,
+        contactEmail
+    } = req.body;
+
+    const logoFilename =
+        'placeholder-logo.png';
+
+    const organizationId =
+        await createOrganization(
+            name,
+            description,
+            contactEmail,
+            logoFilename
+        );
+
+    req.flash(
+        'success',
+        'Organization created successfully.'
+    );
+
+    res.redirect(
+        `/organization/${organizationId}`
+    );
+};
+
+
 export {
     showOrganizationsPage,
-    showOrganizationDetailsPage
+    showOrganizationDetailsPage,
+    showNewOrganizationForm,
+    showEditOrganizationForm,
+    processNewOrganizationForm,
+    processEditOrganizationForm,
+    organizationValidation
 };

@@ -1,4 +1,7 @@
 import express from 'express';
+import session from 'express-session';
+import flash from 'connect-flash';
+
 import { fileURLToPath } from 'url';
 import path from 'path';
 import router from './src/routes.js';
@@ -13,6 +16,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use(session({
+    secret: 'cse340-secret-key',
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(flash());
+
 
 /**
  * Configure Express middleware
@@ -35,11 +50,19 @@ app.use((req, res, next) => {
     next();
 });
 
-// Middleware to make NODE_ENV available to all templates
+// Middleware to make values available to all templates
 app.use((req, res, next) => {
     res.locals.NODE_ENV = NODE_ENV;
+
+    res.locals.successMessages =
+        req.flash('success');
+
+    res.locals.errorMessages =
+        req.flash('error');
+
     next();
 });
+
 
 /**
  * Routes

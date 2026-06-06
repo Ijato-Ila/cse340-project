@@ -1,7 +1,7 @@
 import db from './db.js';
 
 const getAllProjects = async () => {
-  const query = `
+    const query = `
         SELECT
             project.project_id,
             project.title,
@@ -16,9 +16,9 @@ const getAllProjects = async () => {
             ON project.category_id = category.category_id;
     `;
 
-  const result = await db.query(query);
+    const result = await db.query(query);
 
-  return result.rows;
+    return result.rows;
 };
 
 const getProjectsByOrganizationId = async (organizationId) => {
@@ -69,6 +69,8 @@ const getProjectDetails = async (projectId) => {
             project.description,
             project.location,
             project.date,
+            project.organization_id,
+            project.category_id,
             organization.name AS organization_name
         FROM project
         JOIN organization
@@ -84,9 +86,98 @@ const getProjectDetails = async (projectId) => {
         : null;
 };
 
+
+const createProject = async (
+    title,
+    description,
+    location,
+    date,
+    organizationId,
+    categoryId
+) => {
+    const query = `
+        INSERT INTO project
+        (
+            title,
+            description,
+            location,
+            date,
+            organization_id,
+            category_id
+        )
+        VALUES
+        (
+            $1,
+            $2,
+            $3,
+            $4,
+            $5,
+            $6
+        )
+        RETURNING project_id;
+    `;
+
+    const queryParams = [
+        title,
+        description,
+        location,
+        date,
+        organizationId,
+        categoryId
+    ];
+
+    const result = await db.query(
+        query,
+        queryParams
+    );
+
+    return result.rows[0].project_id;
+};
+
+
+const updateProject = async (
+    projectId,
+    title,
+    description,
+    location,
+    date,
+    organizationId,
+    categoryId
+) => {
+    const query = `
+        UPDATE project
+        SET
+            title = $1,
+            description = $2,
+            location = $3,
+            date = $4,
+            organization_id = $5,
+            category_id = $6
+        WHERE project_id = $7;
+    `;
+
+    const queryParams = [
+        title,
+        description,
+        location,
+        date,
+        organizationId,
+        categoryId,
+        projectId
+    ];
+
+    await db.query(
+        query,
+        queryParams
+    );
+};
+
+
 export {
     getAllProjects,
     getProjectsByOrganizationId,
     getProjectsByCategoryId,
-    getProjectDetails
+    getProjectDetails,
+    createProject,
+    updateProject
 };
