@@ -39,7 +39,9 @@ import {
     processLoginForm,
     processLogout,
     showDashboard,
-    requireLogin
+    showUsersPage,
+    requireLogin,
+    requireRole
 } from './controllers/users.js';
 
 import { testErrorPage } from './controllers/errors.js';
@@ -51,25 +53,25 @@ router.get('/', showHomePage);
 
 router.get('/organizations', showOrganizationsPage);
 router.get('/organization/:id', showOrganizationDetailsPage);
-router.get('/new-organization', showNewOrganizationForm);
-router.post('/new-organization', organizationValidation, processNewOrganizationForm);
-router.get('/edit-organization/:id', showEditOrganizationForm);
-router.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm);
+router.get('/new-organization', requireRole(2), showNewOrganizationForm);
+router.post('/new-organization', requireRole(2), organizationValidation, processNewOrganizationForm);
+router.get('/edit-organization/:id', requireRole(2), showEditOrganizationForm);
+router.post('/edit-organization/:id', requireRole(2), organizationValidation, processEditOrganizationForm);
 
 
 router.get('/projects', showProjectsPage);
-router.get('/new-project', showNewProjectForm);
-router.post('/new-project', projectValidation, processNewProjectForm);
-router.get('/edit-project/:id', showEditProjectForm);
-router.post('/edit-project/:id', projectValidation, processEditProjectForm);
+router.get('/new-project', requireRole(2), showNewProjectForm);
+router.post('/new-project', requireRole(2), projectValidation, processNewProjectForm);
+router.get('/edit-project/:id', requireRole(2), showEditProjectForm);
+router.post('/edit-project/:id', requireRole(2), projectValidation, processEditProjectForm);
 router.get('/project/:id', showProjectDetailsPage);
 
 
 router.get('/categories', showCategoriesPage);
-router.get('/new-category', showNewCategoryForm);
-router.post('/new-category', categoryValidation, processNewCategoryForm);
-router.get('/edit-category/:id', showEditCategoryForm);
-router.post('/edit-category/:id', categoryValidation, processEditCategoryForm);
+router.get('/new-category', requireRole(2), showNewCategoryForm);
+router.post('/new-category', requireRole(2), categoryValidation, processNewCategoryForm);
+router.get('/edit-category/:id', requireRole(2), showEditCategoryForm);
+router.post('/edit-category/:id', requireRole(2), categoryValidation, processEditCategoryForm);
 router.get('/category/:id', showCategoryDetailsPage);
 
 
@@ -79,6 +81,7 @@ router.get('/login', showLoginForm);
 router.post('/login', processLoginForm);
 router.get('/logout', processLogout);
 router.get('/dashboard', requireLogin, showDashboard);
+router.get('/users', requireRole(2), showUsersPage);
 
 
 router.get('/test-route', (req, res) => {

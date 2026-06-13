@@ -14,6 +14,14 @@
         Email:
         <%= email %>
     </p>
+
+    <% if (roleId === 2) { %>
+        <p>
+            <a href="/users">
+                View Registered Users
+            </a>
+        </p>
+    <% } %>
 </main>
 
 <%- include('partials/footer') %>

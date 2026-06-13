@@ -1,4 +1,3 @@
-
 -- Organization Table
 
 CREATE TABLE organization (
@@ -25,6 +24,7 @@ CREATE TABLE project (
     title VARCHAR(150) NOT NULL,
     description TEXT NOT NULL,
     location VARCHAR(150) NOT NULL,
+    date DATE,
     organization_id INTEGER NOT NULL,
     category_id INTEGER NOT NULL,
     FOREIGN KEY (organization_id)
@@ -34,10 +34,36 @@ CREATE TABLE project (
 );
 
 
+-- Roles Table
+
+CREATE TABLE roles (
+    role_id SERIAL PRIMARY KEY,
+    role_name VARCHAR(50) UNIQUE NOT NULL,
+    role_description TEXT
+);
+
+
+-- Users Table
+
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role_id INTEGER REFERENCES roles(role_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- Insert Organizations
 
 INSERT INTO organization
-(name, description, contact_email, logo_filename)
+(
+    name,
+    description,
+    contact_email,
+    logo_filename
+)
 VALUES
 (
     'BrightFuture Builders',
@@ -61,7 +87,8 @@ VALUES
 
 -- Insert Categories
 
-IINSERT INTO category (name)
+INSERT INTO category
+(name)
 VALUES
 ('Community Service'),
 ('Environmental'),
@@ -71,12 +98,20 @@ VALUES
 -- Insert Projects
 
 INSERT INTO project
-(title, description, location, organization_id, category_id)
+(
+    title,
+    description,
+    location,
+    date,
+    organization_id,
+    category_id
+)
 VALUES
 (
     'Neighborhood Cleanup',
     'Volunteers help clean parks and streets.',
     'Portland',
+    '2026-01-01',
     1,
     1
 ),
@@ -84,6 +119,7 @@ VALUES
     'Community Garden Build',
     'Building urban gardens for local food production.',
     'Seattle',
+    '2025-12-31',
     2,
     2
 ),
@@ -91,19 +127,19 @@ VALUES
     'After School Tutoring',
     'Helping students with homework and mentoring.',
     'Boise',
+    '2026-01-01',
     3,
     3
 );
 
 
-CREATE TABLE roles (
-    role_id SERIAL PRIMARY KEY,
-    role_name VARCHAR(50) UNIQUE NOT NULL,
-    role_description TEXT
-);
+-- Insert Roles
 
 INSERT INTO roles
-(role_name, role_description)
+(
+    role_name,
+    role_description
+)
 VALUES
 (
     'user',
@@ -114,11 +150,20 @@ VALUES
     'Administrator with full system access'
 );
 
-CREATE TABLE users (
-    user_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    role_id INTEGER REFERENCES roles(role_id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+-- Insert Admin User
+
+INSERT INTO users
+(
+    name,
+    email,
+    password_hash,
+    role_id
+)
+VALUES
+(
+    'Admin User',
+    'admin@example.com',
+    '$2b$10$C1kMxQpuN5r/HCe2s1aqOec5A7G7zsaYFLlrhqtVKY5RMq8souu06',
+    2
 );
