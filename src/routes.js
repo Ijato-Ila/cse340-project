@@ -44,6 +44,11 @@ import {
     requireRole
 } from './controllers/users.js';
 
+import {
+    processVolunteerSignup,
+    processVolunteerRemoval
+} from './controllers/volunteers.js';
+
 import { testErrorPage } from './controllers/errors.js';
 
 const router = express.Router();
@@ -82,6 +87,10 @@ router.post('/login', processLoginForm);
 router.get('/logout', processLogout);
 router.get('/dashboard', requireLogin, showDashboard);
 router.get('/users', requireRole(2), showUsersPage);
+
+
+router.get('/volunteer/:projectId', requireLogin, processVolunteerSignup);
+router.get('/remove-volunteer/:projectId', requireLogin, processVolunteerRemoval);
 
 
 router.get('/test-route', (req, res) => {

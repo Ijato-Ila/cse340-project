@@ -19,6 +19,10 @@ import {
   getAllOrganizations
 } from '../models/organizations.js';
 
+import {
+  isVolunteer
+} from '../models/volunteers.js';
+
 const projectValidation = [
   body('title')
     .trim()
@@ -63,21 +67,45 @@ const showProjectsPage = async (req, res) => {
 };
 
 const showProjectDetailsPage = async (req, res) => {
-  const projectId = req.params.id;
+  const projectId =
+    req.params.id;
 
   const projectDetails =
-    await getProjectDetails(projectId);
+    await getProjectDetails(
+      projectId
+    );
 
   const categories =
-    await getCategoriesByProjectId(projectId);
+    await getCategoriesByProjectId(
+      projectId
+    );
 
-  const title = 'Project Details';
+  let userIsVolunteer =
+    false;
 
-  res.render('project', {
-    title,
-    projectDetails,
-    categories
-  });
+  if (
+    req.session &&
+    req.session.user
+  ) {
+    userIsVolunteer =
+      await isVolunteer(
+        req.session.user.user_id,
+        projectId
+      );
+  }
+
+  const title =
+    'Project Details';
+
+  res.render(
+    'project',
+    {
+      title,
+      projectDetails,
+      categories,
+      userIsVolunteer
+    }
+  );
 };
 
 const showNewProjectForm = async (req, res) => {

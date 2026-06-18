@@ -43,13 +43,43 @@
                 <% }) %>
         </ul>
 
-        <% if (isAdmin) { %>
-            <p>
-                <a href="/edit-project/<%= projectDetails.project_id %>">
-                    Edit Project
-                </a>
-            </p>
-            <% } %>
+
+        </ul>
+
+        <% if (isLoggedIn) { %>
+
+            <% if (userIsVolunteer) { %>
+
+                <p>
+                    You are volunteering for this project.
+                </p>
+
+                <p>
+                    <a href="/remove-volunteer/<%= projectDetails.project_id %>">
+                        Stop Volunteering
+                    </a>
+                </p>
+
+                <% } else { %>
+
+                    <p>
+                        <a href="/volunteer/<%= projectDetails.project_id %>">
+                            Volunteer For This Project
+                        </a>
+                    </p>
+
+                    <% } %>
+
+                        <% } %>
+
+                            <% if (isAdmin) { %>
+                                <p>
+                                    <a href="/edit-project/<%= projectDetails.project_id %>">
+                                        Edit Project
+                                    </a>
+                                </p>
+                                <% } %>
+
 
     </main>
 

@@ -6,6 +6,12 @@ import {
     getAllUsers
 } from '../models/users.js';
 
+
+import {
+    getVolunteerProjects
+} from '../models/volunteers.js';
+
+
 const showUserRegistrationForm = (
     req,
     res
@@ -155,12 +161,17 @@ const processLogout = (
 };
 
 
-const showDashboard = (
+const showDashboard = async (
     req,
     res
 ) => {
     const user =
         req.session.user;
+
+    const volunteerProjects =
+        await getVolunteerProjects(
+            user.user_id
+        );
 
     res.render(
         'dashboard',
@@ -168,7 +179,8 @@ const showDashboard = (
             title: 'Dashboard',
             name: user.name,
             email: user.email,
-            roleId: user.role_id
+            roleId: user.role_id,
+            volunteerProjects
         }
     );
 };
@@ -252,7 +264,6 @@ const requireRole = (
         next();
     };
 };
-
 
 
 export {

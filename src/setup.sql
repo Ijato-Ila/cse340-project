@@ -55,6 +55,20 @@ CREATE TABLE users (
 );
 
 
+-- Volunteer Table
+
+CREATE TABLE volunteer (
+    volunteer_id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    project_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id)
+        REFERENCES users (user_id),
+    FOREIGN KEY (project_id)
+        REFERENCES project (project_id),
+    UNIQUE (user_id, project_id)
+);
+
+
 -- Insert Organizations
 
 INSERT INTO organization
