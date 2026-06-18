@@ -1,33 +1,35 @@
 <%- include('partials/header') %>
 
-<main>
-    <h1><%= title %></h1>
+    <main>
+        <h1>
+            <%= title %>
+        </h1>
 
-    <p>Here are a few of our partner organizations:</p>
+        <p>Here are a few of our partner organizations:</p>
 
-    <ul>
-        <% organizations.forEach(organization => { %>
-            <li>
-                <img
-                    src="/images/<%= organization.logo_filename %>"
-                    alt="<%= organization.name %> logo"
-                >
+        <ul>
+            <% organizations.forEach(organization=> { %>
+                <li>
+                    <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
 
-                <a href="/organization/<%= organization.organization_id %>">
-                    <%= organization.name %>
-                </a>
+                    <a href="/organization/<%= organization.organization_id %>">
+                        <%= organization.name %>
+                    </a>
 
-                : <%= organization.contact_email %>
-            </li>
-        <% }) %>
-    </ul>
+                    : <%= organization.contact_email %>
+                </li>
+                <% }) %>
+        </ul>
 
-    <p>
-        Want to contribute to our service network?
-        <a href="/new-organization">
-            Register a new organization
-        </a>.
-    </p>
-</main>
+        <% if (isAdmin) { %>
+            <p>
+                Want to contribute to our service network?
+                <a href="/new-organization">
+                    Register a new organization
+                </a>.
+            </p>
+            <% } %>
 
-<%- include('partials/footer') %>
+    </main>
+
+    <%- include('partials/footer') %>

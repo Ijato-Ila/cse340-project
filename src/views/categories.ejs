@@ -17,12 +17,15 @@
                 <% }) %>
         </ul>
 
-        <p>
-            Want to add a new service category?
-            <a href="/new-category">
-                Create a new category
-            </a>.
-        </p>
+        <% if (isAdmin) { %>
+            <p>
+                Want to add a new service category?
+                <a href="/new-category">
+                    Create a new category
+                </a>.
+            </p>
+            <% } %>
+
     </main>
 
     <%- include('partials/footer') %>
